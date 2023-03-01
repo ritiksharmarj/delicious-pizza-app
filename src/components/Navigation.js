@@ -1,13 +1,6 @@
 import { Link } from 'react-router-dom';
 
 const Navigation = () => {
-   const cartIconStyle = {
-      backgroundColor: '#F59E0D',
-      display: 'flex',
-      padding: '6px 12px',
-      borderRadius: '50px',
-   };
-
    return (
       <>
          <nav className='container mx-auto flex items-center justify-between py-4'>
@@ -24,7 +17,7 @@ const Navigation = () => {
                </li>
                <li>
                   <Link to='/cart'>
-                     <div style={cartIconStyle}>
+                     <div className='bg-yellow-500 flex py-2 px-4 rounded-full'>
                         <span>10</span>
                         <img
                            className='ml-2'
