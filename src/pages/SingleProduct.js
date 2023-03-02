@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const SingleProduct = () => {
    const [singleProductItem, setSingleProductItem] = useState({});
 
    // Get the product item Id param from the URL.
    const itemParams = useParams();
+
+   // Navigate to other components using 'useNavigate' hook
+   const navigate = useNavigate();
 
    // Fetch data (product item) from the server using this Param Id.
    useEffect(() => {
@@ -22,10 +25,17 @@ const SingleProduct = () => {
 
    return (
       <div className='container mx-auto py-12'>
-         <button className='font-bold mb-12'>Back</button>
+         <button
+            className='font-bold mb-12'
+            onClick={() => {
+               navigate(-1); // redirect to previous page
+            }}
+         >
+            Back
+         </button>
 
          <div className='flex gap-16'>
-            <img src='/images/peproni.png' alt='peproni' />
+            <img src={singleProductItem.image} alt={singleProductItem.name} />
             <div className='flex flex-col'>
                <h3 className='text-xl font-bold'>{singleProductItem.name}</h3>
                <span className='text-md'>{singleProductItem.size}</span>
