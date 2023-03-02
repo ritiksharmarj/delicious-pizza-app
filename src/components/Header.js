@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Navigation = () => {
+const Header = () => {
    return (
       <>
          <nav className='container mx-auto flex items-center justify-between py-4'>
@@ -33,4 +33,4 @@ const Navigation = () => {
    );
 };
 
-export default Navigation;
+export default Header;
