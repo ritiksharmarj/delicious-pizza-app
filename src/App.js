@@ -10,9 +10,15 @@ import { useEffect, useState } from 'react';
 const App = () => {
    const [cart, setCart] = useState({});
 
-   // Update initial cart value
+   // Fetch cart from local storage
    useEffect(() => {
-      window.localStorage.setItem('cart', JSON.stringify(cart));
+      const cart = window.localStorage.getItem('cartKey');
+      setCart(JSON.parse(cart));
+   }, []);
+
+   // Set items to local storage after cart is updated
+   useEffect(() => {
+      window.localStorage.setItem('cartKey', JSON.stringify(cart));
    }, [cart]);
 
    return (
