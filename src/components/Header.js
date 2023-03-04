@@ -22,7 +22,8 @@ const Header = () => {
                <li>
                   <Link to='/cart'>
                      <div className='bg-yellow-500 flex gap-2 py-2 px-4 font-bold rounded-full'>
-                        <span>{cart.totalItems}</span>
+                        {/* <span>{cart.totalItems ? cart.totalItems : 0}</span> */}
+                        {cart.totalItems ? <span>{cart.totalItems}</span> : ''}
                         <img src='/images/cart.png' alt='cart-icon' />
                      </div>
                   </Link>

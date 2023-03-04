@@ -1,14 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 
 const Cart = () => {
+   let grandTotal = 0;
    const [savedCartItems, setSavedCartItems] = useState([]);
-   console.log(savedCartItems);
    const { cart, setCart } = useContext(CartContext);
+
+   // Don't make another request to server if cart is already fetched once
+   const [priceFetched, setPriceFetched] = useState(false);
 
    useEffect(() => {
       // If there is no item in the cart, return nothing
       if (!cart.items) return;
+
+      if (priceFetched) return;
 
       // Using fetch() to POST json data
       (async () => {
@@ -30,15 +36,16 @@ const Cart = () => {
          if (!res.ok) throw new Error('Internal server error');
 
          setSavedCartItems(data);
+         setPriceFetched(true);
       })();
-   }, [cart]);
+   }, [cart, priceFetched]);
 
    // Get product quantity
    const getProductQty = (productId) => {
       return cart.items[productId];
    };
 
-   // Increase the product quantity when click '+' icon
+   // Increase the product quantity when click '+' icon and update the global cart state
    const productIncrement = (productId) => {
       const oldQty = cart.items[productId];
       const _cart = { ...cart };
@@ -47,7 +54,30 @@ const Cart = () => {
       setCart(_cart);
    };
 
-   return (
+   // Decrease the product quantity when click '-' icon and update the global cart state
+   const productDecrement = (productId) => {
+      const oldQty = cart.items[productId];
+
+      if (oldQty === 1) return;
+
+      const _cart = { ...cart };
+      _cart.items[productId] = oldQty - 1;
+      _cart.totalItems -= 1;
+      setCart(_cart);
+   };
+
+   // Calc total sum for each item with increment/decrement quantity
+   const getSumItem = (productId, productPrice) => {
+      const sum = productPrice * getProductQty(productId);
+
+      // Calc grand total
+      grandTotal += sum;
+
+      return sum;
+   };
+
+   // If there is no item selected in the cart, show empty cart layout
+   return savedCartItems.length ? (
       <div className='container mx-auto lg:w-1/2 w-full py-12'>
          <h2 className='font-bold text-3xl mb-12'>Cart items</h2>
 
@@ -68,7 +98,12 @@ const Cart = () => {
                         </div>
 
                         <div className='flex items-center gap-4 font-bold'>
-                           <button className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none'>
+                           <button
+                              onClick={() => {
+                                 productDecrement(item._id);
+                              }}
+                              className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none'
+                           >
                               -
                            </button>
                            <span>{getProductQty(item._id)}</span>
@@ -82,7 +117,7 @@ const Cart = () => {
                            </button>
                         </div>
 
-                        <span>₹ {item.price}</span>
+                        <span>₹ {getSumItem(item._id, item.price)}</span>
                         <button className='bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full leading-none text-white'>
                            Delete
                         </button>
@@ -96,12 +131,31 @@ const Cart = () => {
 
          <div className='flex flex-col items-end mt-12'>
             <span>
-               <b>Grand Total:</b> ₹ 1299
+               <b>Grand Total:</b> ₹ {grandTotal}
             </span>
             <button className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none font-bold mt-6'>
                Order Now
             </button>
          </div>
+      </div>
+   ) : (
+      <div className='container mx-auto h-full lg:w-1/2 w-full py-12 flex flex-col items-center'>
+         <img
+            className='h-72 mb-6'
+            src='/images/Pizza maker-amico.svg'
+            alt='Empty cart'
+         />
+         <h2 className='font-medium text-3xl'>
+            Your cart is waiting to be filled
+         </h2>
+         <span className='text-lg mt-4'>
+            Make your task list and Order it now!
+         </span>
+         <Link to='/'>
+            <button className='px-6 py-2 rounded-full text-white font-bold bg-yellow-500 hover:bg-yellow-600 transition duration-300 mt-10'>
+               Start shopping
+            </button>
+         </Link>
       </div>
    );
 };
