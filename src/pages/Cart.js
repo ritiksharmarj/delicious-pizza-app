@@ -94,6 +94,12 @@ const Cart = () => {
       setSavedCartItems(updatedCartItems);
    };
 
+   const handleOrderNow = () => {
+      setCart({});
+      setSavedCartItems([]);
+      // alert('Order placed successfully!');
+   };
+
    // If there is no item selected in the cart, show empty cart layout
    return savedCartItems.length ? (
       <div className='container mx-auto lg:w-1/2 w-full py-12'>
@@ -156,7 +162,10 @@ const Cart = () => {
             <span>
                <b>Grand Total:</b> ₹ {grandTotal}
             </span>
-            <button className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none font-bold mt-6'>
+            <button
+               onClick={handleOrderNow}
+               className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none font-bold mt-6'
+            >
                Order Now
             </button>
          </div>

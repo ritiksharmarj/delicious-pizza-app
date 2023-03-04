@@ -6,19 +6,20 @@ import Products from './pages/ProductsPage';
 import SingleProduct from './pages/SingleProduct';
 import { CartContext } from './CartContext';
 import { useEffect, useState } from 'react';
+import { getCart, storeCart } from './helpers';
 
 const App = () => {
    const [cart, setCart] = useState({});
 
    // Fetch cart from local storage
    useEffect(() => {
-      const cart = window.localStorage.getItem('cartKey');
+      const cart = getCart();
       setCart(JSON.parse(cart));
    }, []);
 
    // Set items to local storage after cart is updated
    useEffect(() => {
-      window.localStorage.setItem('cartKey', JSON.stringify(cart));
+      storeCart('cartKey', JSON.stringify(cart));
    }, [cart]);
 
    return (
