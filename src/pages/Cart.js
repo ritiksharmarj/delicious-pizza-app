@@ -4,8 +4,10 @@ import { CartContext } from '../CartContext';
 
 const Cart = () => {
    let grandTotal = 0;
-   const [savedCartItems, setSavedCartItems] = useState([]);
    const { cart, setCart } = useContext(CartContext);
+
+   // Store all the cart items in the lists
+   const [savedCartItems, setSavedCartItems] = useState([]);
 
    // Don't make another request to server if cart is already fetched once
    const [priceFetched, setPriceFetched] = useState(false);
@@ -14,6 +16,7 @@ const Cart = () => {
       // If there is no item in the cart, return nothing
       if (!cart.items) return;
 
+      // If cart page already fetched cart items then don't make another request, return nothing
       if (priceFetched) return;
 
       // Using fetch() to POST json data
@@ -76,6 +79,21 @@ const Cart = () => {
       return sum;
    };
 
+   const handleDelete = (productId) => {
+      const _cart = { ...cart };
+      const productQty = _cart.items[productId];
+      _cart.totalItems -= productQty; // update total items to show in the header
+
+      delete _cart.items[productId]; // removes a property from an object
+      setCart(_cart);
+
+      // Also remove item from the cart list
+      const updatedCartItems = savedCartItems.filter(
+         (item) => item._id !== productId
+      );
+      setSavedCartItems(updatedCartItems);
+   };
+
    // If there is no item selected in the cart, show empty cart layout
    return savedCartItems.length ? (
       <div className='container mx-auto lg:w-1/2 w-full py-12'>
@@ -118,7 +136,12 @@ const Cart = () => {
                         </div>
 
                         <span>₹ {getSumItem(item._id, item.price)}</span>
-                        <button className='bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full leading-none text-white'>
+                        <button
+                           onClick={() => {
+                              handleDelete(item._id);
+                           }}
+                           className='bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full leading-none text-white'
+                        >
                            Delete
                         </button>
                      </div>
