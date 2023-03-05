@@ -14,7 +14,7 @@ const Header = () => {
             </Link>
 
             <ul className='flex items-center gap-x-6 font-bold'>
-               <li>
+               <li className='md:list-item hidden'>
                   <Link to='/'>Home</Link>
                </li>
                <li>
