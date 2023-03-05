@@ -24,9 +24,9 @@ const SingleProduct = () => {
    }, [itemParams._id]);
 
    return (
-      <div className='container mx-auto py-12'>
+      <div className='container mx-auto py-12 px-4 md:px-0'>
          <button
-            className='font-bold mb-12'
+            className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none font-bold mb-12'
             onClick={() => {
                navigate(-1); // redirect to previous page
             }}
@@ -34,7 +34,7 @@ const SingleProduct = () => {
             Back
          </button>
 
-         <div className='flex gap-16'>
+         <div className='flex flex-col md:flex-row gap-16'>
             <img src={singleProductItem.image} alt={singleProductItem.name} />
             <div className='flex flex-col'>
                <h3 className='text-xl font-bold'>{singleProductItem.name}</h3>

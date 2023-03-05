@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../CartContext';
+import { MdOutlineAdd, MdRemove, MdDelete } from 'react-icons/md';
 
 const Cart = () => {
    let grandTotal = 0;
@@ -102,7 +103,7 @@ const Cart = () => {
 
    // If there is no item selected in the cart, show empty cart layout
    return savedCartItems.length ? (
-      <div className='container mx-auto lg:w-1/2 w-full py-12'>
+      <div className='container mx-auto lg:w-1/2 w-full py-12 px-4 md:px-0'>
          <h2 className='font-bold text-3xl mb-12'>Cart items</h2>
 
          <ul>
@@ -116,28 +117,28 @@ const Cart = () => {
                               src={item.image}
                               alt={item.name}
                            />
-                           <span className='font-bold ml-4 w-48'>
+                           <span className='font-bold ml-4 w-48 md:inline hidden'>
                               {item.name}
                            </span>
                         </div>
 
-                        <div className='flex items-center gap-4 font-bold'>
+                        <div className='flex items-center md:gap-4 gap-2 font-bold'>
                            <button
                               onClick={() => {
                                  productDecrement(item._id);
                               }}
-                              className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none'
+                              className='bg-yellow-500 hover:bg-yellow-600 md:px-4 px-2 py-2 rounded-full leading-none'
                            >
-                              -
+                              <MdRemove />
                            </button>
                            <span>{getProductQty(item._id)}</span>
                            <button
                               onClick={() => {
                                  productIncrement(item._id);
                               }}
-                              className='bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-full leading-none'
+                              className='bg-yellow-500 hover:bg-yellow-600 md:px-4 px-2 py-2 rounded-full leading-none'
                            >
-                              +
+                              <MdOutlineAdd />
                            </button>
                         </div>
 
@@ -146,9 +147,10 @@ const Cart = () => {
                            onClick={() => {
                               handleDelete(item._id);
                            }}
-                           className='bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full leading-none text-white'
+                           className='bg-red-500 hover:bg-red-600 md:px-4 px-2 py-2 rounded-full leading-none text-white flex items-center'
                         >
-                           Delete
+                           <MdDelete className='md:hidden' />
+                           <span className='md:block hidden'>Delete</span>
                         </button>
                      </div>
                   </li>
@@ -171,20 +173,20 @@ const Cart = () => {
          </div>
       </div>
    ) : (
-      <div className='container mx-auto h-full lg:w-1/2 w-full py-12 flex flex-col items-center'>
+      <div className='container mx-auto h-full md:w-1/2 w-full py-12 flex flex-col items-center px-4 md:px-0'>
          <img
-            className='h-72 mb-6'
+            className='h-48 md:h-72 mb-6'
             src='/images/Pizza maker-amico.svg'
             alt='Empty cart'
          />
-         <h2 className='font-medium text-3xl'>
+         <h2 className='font-medium md:text-3xl text-xl'>
             Your cart is waiting to be filled
          </h2>
-         <span className='text-lg mt-4'>
+         <span className='md:text-lg text-sm mt-4'>
             Make your task list and Order it now!
          </span>
          <Link to='/'>
-            <button className='px-6 py-2 rounded-full text-white font-bold bg-yellow-500 hover:bg-yellow-600 transition duration-300 mt-10'>
+            <button className='px-6 py-2 rounded-full leading-none font-bold bg-yellow-500 hover:bg-yellow-600 transition duration-300 mt-10'>
                Start shopping
             </button>
          </Link>
